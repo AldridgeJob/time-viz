@@ -1,0 +1,12 @@
+{
+  "name": "time-viz",
+  "version": "0.1.0",
+  "description": "Time visualization tool",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server"
+  },
+  "keywords": ["time", "visualization", "chart"],
+  "author": "",
+  "license": "MIT"
+}
