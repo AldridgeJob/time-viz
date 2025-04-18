@@ -43,6 +43,20 @@ function displayResults(times) {
     const output = document.getElementById('output');
     output.innerHTML = '<h2>Results</h2>';
 
+    // stats
+    const stats = document.createElement('div');
+    stats.className = 'stats';
+    stats.innerHTML = `
+        <p>Total entries: ${times.length}</p>
+        <p>Range: ${times[0].toLocaleString()} - ${times[times.length-1].toLocaleString()}</p>
+    `;
+    output.appendChild(stats);
+
+    // timeline visualization
+    const timeline = createTimeline(times);
+    output.appendChild(timeline);
+
+    // list view
     const list = document.createElement('ul');
     times.forEach(t => {
         const li = document.createElement('li');
@@ -51,4 +65,24 @@ function displayResults(times) {
     });
 
     output.appendChild(list);
+}
+
+function createTimeline(times) {
+    const container = document.createElement('div');
+    container.className = 'timeline';
+
+    const min = times[0].getTime();
+    const max = times[times.length - 1].getTime();
+    const range = max - min;
+
+    times.forEach(t => {
+        const marker = document.createElement('div');
+        marker.className = 'marker';
+        const pos = ((t.getTime() - min) / range) * 100;
+        marker.style.left = pos + '%';
+        marker.title = t.toLocaleString();
+        container.appendChild(marker);
+    });
+
+    return container;
 }

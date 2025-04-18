@@ -65,3 +65,34 @@ h1 {
     background: #f8f9fa;
     border-left: 3px solid #007bff;
 }
+
+.stats {
+    padding: 15px;
+    background: #e9ecef;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.stats p {
+    margin: 5px 0;
+}
+
+.timeline {
+    position: relative;
+    height: 60px;
+    background: linear-gradient(to right, #007bff, #00d4ff);
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.marker {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border: 2px solid #333;
+    border-radius: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+}
