@@ -8,6 +8,11 @@ function parseTime(str) {
         return new Date(num);
     }
 
+    // millisecond timestamp
+    if (/^\d{13}$/.test(str)) {
+        return new Date(parseInt(str));
+    }
+
     // try ISO format
     const date = new Date(str);
     if (!isNaN(date.getTime())) {
@@ -46,9 +51,13 @@ function displayResults(times) {
     // stats
     const stats = document.createElement('div');
     stats.className = 'stats';
+    const duration = times[times.length-1] - times[0];
+    const days = Math.floor(duration / (1000 * 60 * 60 * 24));
     stats.innerHTML = `
         <p>Total entries: ${times.length}</p>
-        <p>Range: ${times[0].toLocaleString()} - ${times[times.length-1].toLocaleString()}</p>
+        <p>First: ${times[0].toLocaleString()}</p>
+        <p>Last: ${times[times.length-1].toLocaleString()}</p>
+        <p>Duration: ${days} days</p>
     `;
     output.appendChild(stats);
 
