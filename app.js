@@ -22,26 +22,6 @@ function parseTime(str) {
     return null;
 }
 
-document.getElementById('visualizeBtn').addEventListener('click', () => {
-    const input = document.getElementById('timeInput').value;
-    const lines = input.split('\n').filter(l => l.trim());
-
-    const times = [];
-    for (const line of lines) {
-        const t = parseTime(line.trim());
-        if (t) {
-            times.push(t);
-        }
-    }
-
-    if (times.length === 0) {
-        alert('No valid timestamps found');
-        return;
-    }
-
-    displayResults(times);
-});
-
 function displayResults(times) {
     times.sort((a, b) => a - b);
 
@@ -94,4 +74,61 @@ function createTimeline(times) {
     });
 
     return container;
+}
+
+let currentData = null;
+
+document.getElementById('visualizeBtn').addEventListener('click', () => {
+    const input = document.getElementById('timeInput').value;
+    const lines = input.split('\n').filter(l => l.trim());
+
+    const times = [];
+    for (const line of lines) {
+        const t = parseTime(line.trim());
+        if (t) {
+            times.push(t);
+        }
+    }
+
+    if (times.length === 0) {
+        alert('No valid timestamps found');
+        return;
+    }
+
+    currentData = times;
+    displayResults(times);
+    document.getElementById('exportSection').style.display = 'block';
+});
+
+document.getElementById('exportCsv').addEventListener('click', () => {
+    if (!currentData) return;
+
+    let csv = 'timestamp,iso_string,unix_timestamp\n';
+    currentData.forEach(t => {
+        csv += `${t.getTime()},${t.toISOString()},${Math.floor(t.getTime()/1000)}\n`;
+    });
+
+    downloadFile(csv, 'times.csv', 'text/csv');
+});
+
+document.getElementById('exportJson').addEventListener('click', () => {
+    if (!currentData) return;
+
+    const data = currentData.map(t => ({
+        timestamp: t.getTime(),
+        iso: t.toISOString(),
+        unix: Math.floor(t.getTime()/1000)
+    }));
+
+    downloadFile(JSON.stringify(data, null, 2), 'times.json', 'application/json');
+});
+
+function downloadFile(content, filename, type) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
 }
